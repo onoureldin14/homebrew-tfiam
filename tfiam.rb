@@ -9,12 +9,11 @@ class Tfiam < Formula
   depends_on "python@3.11"
 
   def install
-    # Create virtual environment
-    venv = virtualenv_create(libexec, "python3.11")
+    # Create a virtual environment using python -m venv
+    system "python3.11", "-m", "venv", "#{libexec}/venv"
     
-    # Install Python dependencies
-    venv.pip_install "openai>=1.0.0"
-    venv.pip_install "pbr>=1.7.5"
+    # Install Python dependencies into the virtual environment
+    system "#{libexec}/venv/bin/pip", "install", "openai>=1.0.0", "pbr>=1.7.5"
     
     # Copy the entire project to libexec
     cp_r buildpath, libexec/"tfiam"
@@ -23,7 +22,7 @@ class Tfiam < Formula
     (bin/"tfiam").write <<~EOS
       #!/bin/bash
       cd "#{libexec}/tfiam"
-      exec "#{libexec}/bin/python" "main.py" "$@"
+      exec "#{libexec}/venv/bin/python" "main.py" "$@"
     EOS
     
     chmod 0755, bin/"tfiam"
