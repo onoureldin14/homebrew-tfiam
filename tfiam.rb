@@ -9,17 +9,21 @@ class Tfiam < Formula
   depends_on "python@3.11"
 
   def install
-    # Install Python dependencies using the Homebrew Python
-    system "#{HOMEBREW_PREFIX}/bin/python3.11", "-m", "pip", "install", "openai>=1.0.0", "pbr>=1.7.5"
+    # Create virtual environment
+    venv = virtualenv_create(libexec, "python3.11")
+    
+    # Install Python dependencies
+    venv.pip_install "openai>=1.0.0"
+    venv.pip_install "pbr>=1.7.5"
     
     # Copy the entire project to libexec
-    libexec.install Dir["*"]
+    cp_r buildpath, libexec/"tfiam"
     
-    # Create a wrapper script that uses the Homebrew Python
+    # Create a wrapper script that uses the virtual environment
     (bin/"tfiam").write <<~EOS
       #!/bin/bash
-      cd "#{libexec}"
-      exec "#{HOMEBREW_PREFIX}/bin/python3.11" "main.py" "$@"
+      cd "#{libexec}/tfiam"
+      exec "#{libexec}/bin/python" "main.py" "$@"
     EOS
     
     chmod 0755, bin/"tfiam"
