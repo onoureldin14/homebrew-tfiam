@@ -3,7 +3,7 @@ class Tfiam < Formula
   homepage "https://github.com/onoureldin14/tfiam"
   url "https://github.com/onoureldin14/tfiam/archive/refs/heads/main.zip"
   version "1.0.0"
-  sha256 "c62482dec4b963af3d4a365abfeab5e9509b3b7a13c171601591087aff480c4b"
+  sha256 "623aec10657a915196924085f1cdb3ad69351518b2ff59575b0f6ed020bca4bb"
   license "MIT"
 
   depends_on "python@3.11"
@@ -18,11 +18,15 @@ class Tfiam < Formula
     # Copy the entire project to libexec
     cp_r buildpath, libexec/"tfiam"
     
-    # Create a wrapper script that uses the virtual environment
+    # Create a wrapper script that uses the virtual environment and preserves working directory
     (bin/"tfiam").write <<~EOS
       #!/bin/bash
+      # Save the current working directory
+      ORIGINAL_DIR="$(pwd)"
+      # Change to the tfiam directory to run the script
       cd "#{libexec}/tfiam"
-      exec "#{libexec}/venv/bin/python" "main.py" "$@"
+      # Run the script with the original working directory as an environment variable
+      ORIGINAL_WORKING_DIR="$ORIGINAL_DIR" exec "#{libexec}/venv/bin/python" "main.py" "$@"
     EOS
     
     chmod 0755, bin/"tfiam"
