@@ -2,8 +2,8 @@ class Tfiam < Formula
   desc "TFIAM - Analyze Terraform repositories and generate IAM permission recommendations with AI explanations"
   homepage "https://github.com/onoureldin14/tfiam"
   url "https://github.com/onoureldin14/tfiam/archive/refs/heads/main.zip"
-  version "1.1.0"
-  sha256 "294f2f6181bf6d18ba11257f7da8fea146253b403d478cf7e469c8a940388a94"
+  version "1.1.1"
+  sha256 "82ac0ea146bc84f425f5db43f6bbb39e2ffc14869b6d149e505ed4cfec57e400"
   license "MIT"
 
   depends_on "python@3.11"
